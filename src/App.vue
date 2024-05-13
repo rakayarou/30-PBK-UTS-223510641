@@ -11,6 +11,40 @@ const todos_asc = computed(() => todos.value.sort((a,b) =>{
 	return a.createdAt - b.createdAt
 }))
 
+const activeMenu = ref('todos');
+const users = ref([]);
+const posts = ref([]);
+const selectedUser = ref(null);
+
+const showTodos = () => {
+  activeMenu.value = 'todos';
+};
+
+const showPosts = () => {
+  activeMenu.value = 'posts';
+};
+
+onMounted(() => {
+  // Ambil data user dari API
+  fetch('https://jsonplaceholder.typicode.com/users')
+    .then(response => response.json())
+    .then(data => {
+      users.value = data;
+    });
+
+  // Ambil data postingan dari API
+  fetch('https://jsonplaceholder.typicode.com/posts')
+    .then(response => response.json())
+    .then(data => {
+      posts.value = data;
+    });
+});
+
+const filteredPosts = computed(() => {
+  // Filter postingan berdasarkan user yang dipilih
+  return posts.value.filter(post => post.userId === parseInt(selectedUser.value));
+});
+
 watch(name, (newVal) => {
 	localStorage.setItem('name', newVal)
 })
@@ -46,6 +80,44 @@ onMounted(() => {
 </script>
 
 <template>
+
+<div id="app">
+    <!-- Header -->
+    <header>
+      <nav>
+        <ul>
+          <li @click="showTodos">Todos</li>
+          <li @click="showPosts">Posts</li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <div v-if="activeMenu === 'todos'">
+        <!-- Fitur Todos -->
+        <h2>Todos</h2>
+        <!-- Placeholder untuk implementasi fitur Todos -->
+      </div>
+      <div v-else-if="activeMenu === 'posts'">
+        <!-- Fitur Postingan -->
+        <h2>Postingan</h2>
+        <select v-model="selectedUser">
+          <option v-for="user in users" :key="user.id" :value="user.id">{{ user.name }}</option>
+        </select>
+        <div v-if="selectedUser">
+          <div v-for="post in filteredPosts" :key="post.id">
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.body }}</p>
+          </div>
+        </div>
+        <div v-else>
+          <p>Silakan pilih pengguna untuk melihat postingan mereka.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
 	<main class="app">
 		
 		<section class="greeting">
