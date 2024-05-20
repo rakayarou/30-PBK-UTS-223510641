@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
 
+import Parent from './components/parent.vue';
+
 const todos = ref([])
 const name = ref('')
 
@@ -73,6 +75,10 @@ const removeTodo = (todo) => {
 	todos.value = todos.value.filter((t) => t !== todo)
 }
 
+const editTodo = (todo) => {
+	todo.editable = true;
+}
+
 onMounted(() => {
 	name.value = localStorage.getItem('name') || ''
 	todos.value = JSON.parse(localStorage.getItem('todos')) || []
@@ -118,11 +124,16 @@ onMounted(() => {
     </main>
   </div>
 
+  <div id="app">
+    <Parent />
+  </div>
+
+
 	<main class="app">
 		
 		<section class="greeting">
 			<h2 class="title">
-				TO DO LIST
+				TO DO LIST RAKA
 			</h2>
 		</section>
 
@@ -172,7 +183,7 @@ onMounted(() => {
 			<h3>AKTIVITAS</h3>
 			<div class="list" id="todo-list">
 
-				<div v-for="todo in todos_asc" :class="`todo-item ${todo.done && 'done'}`">
+				<div v-for="todo in todos_asc" :class="todo-item ${todo.done && 'done'}">
 					<label>
 						<input type="checkbox" v-model="todo.done" />
 						<span :class="`bubble ${
@@ -187,6 +198,7 @@ onMounted(() => {
 					</div>
 
 					<div class="actions">
+						<button class="edit" @click="editTodo(todo)">Edit</button>
 						<button class="delete" @click="removeTodo(todo)">Delete</button>
 					</div>
 				</div>
