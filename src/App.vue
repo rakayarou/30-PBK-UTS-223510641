@@ -1,8 +1,6 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
 
-import Parent from './components/parent.vue';
-
 const todos = ref([])
 const name = ref('')
 
@@ -183,7 +181,7 @@ onMounted(() => {
 			<h3>AKTIVITAS</h3>
 			<div class="list" id="todo-list">
 
-				<div v-for="todo in todos_asc" :class="todo-item ${todo.done && 'done'}">
+				<div v-for="todo in todos_asc" :class="`todo-item ${todo.done && 'done'}`">
 					<label>
 						<input type="checkbox" v-model="todo.done" />
 						<span :class="`bubble ${
