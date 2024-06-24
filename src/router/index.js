@@ -1,6 +1,6 @@
 // router/index.js
 import { createRouter, createWebHistory } from "vue-router";
-import MainLayout from "../layouts/MainLayout.vue";
+import MainLayout from "../components/MainLayout.vue";
 import Todo from "../views/Todo.vue";
 import Post from "../views/Post.vue";
 import Album from "../views/Album.vue";
